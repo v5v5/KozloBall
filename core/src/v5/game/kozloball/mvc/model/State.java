@@ -30,8 +30,7 @@ public class State {
 //	}
 	
 	public State() {
-		_world = new World(new Vector2(0, -10), false);
-		_world.setContinuousPhysics(true);
+		_world = new World(new Vector2(0, -98), true);
 	
 //		debugRenederer = new Box2DDebugRenderer();
 
@@ -55,7 +54,7 @@ public class State {
 		final float y = 0;
 		final float r = 0.1f;
 
-		final float density = 0.5f;
+		final float density = 1.0f;
 		final float friction = 0.75f;
 		final float restitution = 0.1f;
 
@@ -70,14 +69,10 @@ public class State {
 		FixtureDef fd = new FixtureDef();
 		fd.shape = s;
 		fd.density = density;
-		fd.friction = friction;
-		fd.restitution = restitution;
+//		fd.friction = friction;
+//		fd.restitution = restitution;
 
 		Fixture f = b.createFixture(fd);
-
-		b.setLinearDamping(0.0f);
-		b.setAwake(false);
-		b.setActive(true);		
 
 		s.dispose();
 

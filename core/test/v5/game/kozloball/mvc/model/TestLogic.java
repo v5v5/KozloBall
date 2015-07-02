@@ -2,6 +2,7 @@ package v5.game.kozloball.mvc.model;
 
 import org.junit.Test;
 
+
 public class TestLogic {
 
 	@Test

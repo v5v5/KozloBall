@@ -36,6 +36,7 @@ public class Model implements ModelInterface {
 	}
 
 	public void hitBall() {
+		_logic._state._player.applyForceToCenter(1, 1, true);
 //		_logic._state._player.applyLinearImpulse(0, 0, 1, 0, false);
 //		_logic._state._player.setTransform(1, 10, 3);
 		System.out.println("hit");

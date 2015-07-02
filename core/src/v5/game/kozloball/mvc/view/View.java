@@ -17,7 +17,7 @@ public class View {
 	Graphics _g;
 
 	public void draw(LinkedList<Event> _events, State state) {
-		drawField(state);
+//		drawField(state);
 		drawPlayer(state);
 	}
 

@@ -16,13 +16,13 @@ public class Logic {
 	}
 
 	public void step() {
-		_state._player.applyForceToCenter(10, 10, true);
+//		_state._player.applyForceToCenter(10, 10, true);
 		_state._world.step(1/60, 6, 2);
 
 //		System.out.println("count = " + _state._world.getBodyCount());
-		Array<Body> b = new Array<Body>(); 
-		_state._world.getBodies(b);
-		System.out.println("x = " + b.get(0).getPosition().x + " , y = " + b.get(0).getPosition().y);
+//		Array<Body> b = new Array<Body>(); 
+//		_state._world.getBodies(b);
+//		System.out.println("x = " + b.get(0).getPosition().x + " , y = " + b.get(0).getPosition().y);
 		
 	}
 
