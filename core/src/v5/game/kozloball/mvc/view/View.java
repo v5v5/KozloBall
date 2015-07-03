@@ -15,18 +15,34 @@ import com.badlogic.gdx.utils.Array;
 public class View {
 
 	Graphics _g;
+	
+	final int R = 10;
 
 	public void draw(LinkedList<Event> _events, State state) {
-//		drawField(state);
+		clearView();
+		drawField(state);
 		drawPlayer(state);
+		drawBall(state);		
+	}
+
+	private void drawBall(State state) {
+		int x = (int) state.getBall().getPosition().x;
+		int y = (int) (state.getBall().getPosition().y);
+		int r = R;
+
+		_g.fillCircle(x, y, r, 2);
+	}
+
+	private void clearView() {
+		_g.clearRect(-500, -500, 1000, 1000, 4);
 	}
 
 	private void drawPlayer(State state) {
 		int x = (int) state.getPlayer().getPosition().x;
-		int y = (int) state.getPlayer().getPosition().y;
-		int r = 10;
+		int y = (int) (state.getPlayer().getPosition().y);
+		int r = R;
 
-		System.out.println("x: " + x + "  y: " + y);
+//		System.out.println("x: " + x + "  y: " + y);
 		_g.fillCircle(x, y, r, 0);
 	}
 

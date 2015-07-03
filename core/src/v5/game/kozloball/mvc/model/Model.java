@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import v5.game.kozloball.mvc.model.ModelListener.Event;
+import v5.game.kozloball.mvc.model.T.Direction;
+
+import com.badlogic.gdx.math.Vector2;
 
 public class Model implements ModelInterface {
 
@@ -36,7 +39,10 @@ public class Model implements ModelInterface {
 	}
 
 	public void hitBall() {
-		_logic._state._player.applyForceToCenter(1, 1, true);
+		_logic.destroyJointFromPlayerToBall();
+		
+		Vector2 v =  _logic._state._player.getLinearVelocity();
+		_logic._state._ball.applyForceToCenter(v, true);
 //		_logic._state._player.applyLinearImpulse(0, 0, 1, 0, false);
 //		_logic._state._player.setTransform(1, 10, 3);
 		System.out.println("hit");
@@ -46,6 +52,21 @@ public class Model implements ModelInterface {
 	public void step() {
 		_logic.step();
 		fireChangedEvent(Event.STEP);
+	}
+
+	public void movePlayer(Direction direction) {
+		_logic.movePlayer(direction);
+		fireChangedEvent(Event.MOVE_PLAYER);
+	}
+
+	public void stopPlayer() {
+		_logic.stopPlayer();
+		fireChangedEvent(Event.STOP_PLAYER);
+	}
+
+	public void resetWorld() {
+		_logic.resetWorld();
+		fireChangedEvent(Event.RESET_WORLD);
 	}
 	
 	

@@ -80,7 +80,8 @@ public class KozloBallGame1 extends ApplicationAdapter {
 		// Generally in a real game, dont do this in the render loop, as you are
 		// tying the physics
 		// update rate to the frame rate, and vice versa
-		world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+		float d = Gdx.graphics.getDeltaTime();
+		world.step(d, 6, 2);
 
 		// Now update the spritee position accordingly to it's now updated
 		// Physics body

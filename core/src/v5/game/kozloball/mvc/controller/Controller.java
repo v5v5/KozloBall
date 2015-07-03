@@ -35,6 +35,8 @@ public class Controller implements ModelListener  {
 			break;
 		case STEP:			
 			break;
+		case MOVE_PLAYER:			
+			break;
 		case EVENT1:			
 			break;
 		case GAME_OVER:			
@@ -49,13 +51,13 @@ public class Controller implements ModelListener  {
 		}
 	}
 
-	public void movePlayer(Direction left) {
-		// TODO Auto-generated method stub
-		
+	public void movePlayer(Direction direction) {
+		_model.movePlayer(direction);
 	}
 
 	public void hitBall() {
 		_model.hitBall();
+		_model.stopPlayer();
 	}
 
 	public void start() {
@@ -68,6 +70,14 @@ public class Controller implements ModelListener  {
 
 	public void step() {
 		_model.step();
+	}
+
+	public Model getModel() {
+		return _model;
+	}
+
+	public void resetWorld() {
+		_model.resetWorld();
 	}
 
 }

@@ -57,6 +57,9 @@ public class GameTest {
 				case KeyEvent.VK_SPACE:
 					controller.hitBall();
 					break;
+				case KeyEvent.VK_F12:
+					controller.resetWorld();
+					break;
 				default:
 					break;
 				}
@@ -69,7 +72,7 @@ public class GameTest {
 			public void run() {
 				while (true) {
 					try {
-						Thread.sleep(1 / 60);
+						Thread.sleep(1000 / 60);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -91,9 +94,11 @@ public class GameTest {
 
 			@Override
 			public void fillCircle(int x, int y, int r, int colorIndex) {
+				
+
 				graphics.setColor(COLORS[colorIndex]);
-				graphics.fillOval(ORIGIN_X + x - r / 2, ORIGIN_Y + y - r / 2,
-						r, r);
+				graphics.fillOval(ORIGIN_X + x - r, ORIGIN_Y + y - r,
+						2 * r, 2 * r);
 			}
 
 			@Override
@@ -101,6 +106,12 @@ public class GameTest {
 				graphics.setColor(COLORS[colorIndex]);
 				graphics.drawLine(ORIGIN_X + x0, ORIGIN_Y + y0, ORIGIN_X + x1,
 						ORIGIN_Y + y1);
+			}
+
+			@Override
+			public void clearRect(int x, int y, int width, int height,
+					int colorIndex) {
+				graphics.clearRect(ORIGIN_X + x, ORIGIN_X + y, width, height);
 			}
 
 		});

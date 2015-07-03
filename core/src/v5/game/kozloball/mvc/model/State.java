@@ -7,13 +7,14 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.JointDef;
 import com.badlogic.gdx.physics.box2d.World;
 
 public class State {
 
-	// static {
-	// GdxNativesLoader.load();
-	// }
+//	static {
+//		GdxNativesLoader.load();
+//	}
 
 	World _world;
 
@@ -22,21 +23,20 @@ public class State {
 	Body _ball;
 	Body _referee;
 	Body[] _animal = new Body[0];
-
-//	Box2DDebugRenderer debugRenederer;
-//	
-//	public Box2DDebugRenderer getDedugRenderer() {
-//		return debugRenederer;
-//	}
 	
-	public State() {
-		_world = new World(new Vector2(0, -98), true);
-	
-//		debugRenederer = new Box2DDebugRenderer();
+	JointDef _jointPlayerToBall;
 
+	private Logic _logic;
+
+	public State(Logic logic) {
+		_logic = logic;
+		_world = new World(new Vector2(0, 0), true);
+		
+		_world.setContactListener(new GameCollision(_logic));
+	
 		_player = createPlayer();
-		// _field = createField();
-		// _ball = createBall();
+		 _field = createField();
+		 _ball = createBall();
 		// _referee = createReferee();
 	}
 
@@ -50,51 +50,51 @@ public class State {
 
 	Body createPlayer() {
 
-		final float x = 100;
+		final float x = -50;
 		final float y = 0;
-		final float r = 0.1f;
+		final float r = 10f;
 
-		final float density = 1.0f;
-		final float friction = 0.75f;
-		final float restitution = 0.1f;
+		final float density = 0.0000001f;
+		final float friction = 0.0f;
+		final float restitution = 1.0f;
 
-		BodyDef bd = new BodyDef();
-		bd.type = BodyDef.BodyType.DynamicBody;
-		bd.position.set(x, y);
-		Body b = _world.createBody(bd);
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.DynamicBody;
+		bodyDef.position.set(x, y);
+		Body body = _world.createBody(bodyDef);
+		
+		CircleShape shape = new CircleShape();
+		shape.setRadius(r);
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = density;
+		fixtureDef.friction = friction;
+		fixtureDef.restitution = restitution;
 
-		CircleShape s = new CircleShape();
-		s.setRadius(r);
+		Fixture fixture = body.createFixture(fixtureDef);
+		
+		shape.dispose();
 
-		FixtureDef fd = new FixtureDef();
-		fd.shape = s;
-		fd.density = density;
-//		fd.friction = friction;
-//		fd.restitution = restitution;
-
-		Fixture f = b.createFixture(fd);
-
-		s.dispose();
-
-		return b;
+		return body;
 	}
-
+	
 	Body createField() {
 
-		final float density = 0.5f;
+		final float density = 0.0000001f;
 
 		float w = 300;
 		float h = 200;
 		float widthGate = h / 3;
 		float lenghtWall = (h - widthGate) / 2;
 
-		BodyDef bd = new BodyDef();
-		bd.type = BodyDef.BodyType.StaticBody;
-		// bd.position.set(0, 0);
+		BodyDef bodyDef = new BodyDef();
+		bodyDef.type = BodyDef.BodyType.StaticBody;
+		// bodyDef.position.set(0, 0);
 
-		Body body = _world.createBody(bd);
+		Body body = _world.createBody(bodyDef);
 
-		ChainShape s;
+		ChainShape shape;
 		
 		Vector2 v[] = new Vector2[4];
 
@@ -103,32 +103,34 @@ public class State {
 		v[2] = new Vector2(w / 2, -h / 2);
 		v[3] = new Vector2(w / 2, -h / 2 + lenghtWall);
 
-		s = new ChainShape();
-		s.createChain(v);
-		body.createFixture(s, density);
+		shape = new ChainShape();
+		shape.createChain(v);
+		shape.setRadius(1);
+		body.createFixture(shape, density);
 
 		v[0] = new Vector2(-w / 2, h / 2 - lenghtWall);
 		v[1] = new Vector2(-w / 2, h / 2);
 		v[2] = new Vector2(w / 2, h / 2);
 		v[3] = new Vector2(w / 2, h / 2 - lenghtWall);
 
-		s = new ChainShape();
-		s.createChain(v);
-		body.createFixture(s, density);
+		shape = new ChainShape();
+		shape.createChain(v);
+		shape.setRadius(1);
+		body.createFixture(shape, density);
 
-		s.dispose();
+		shape.dispose();
 
 		return body;
 	}
 
 	Body createBall() {
-		final float x = 10;
+		final float x = 50;
 		final float y = 0;
 		final float r = 10;
 
-		final float density = 1f;
-		final float friction = 0.5f;
-		final float restitution = 0.3f;
+		final float density = 0.0000001f;
+		final float friction = 0.0f;
+		final float restitution = 1.0f;
 
 		BodyDef bd = new BodyDef();
 		bd.type = BodyDef.BodyType.DynamicBody;
@@ -156,9 +158,9 @@ public class State {
 		final float y = 0;
 		final float r = 10;
 
-		final float density = 0.5f;
-		final float friction = 0.4f;
-		final float restitution = 0.6f;
+		final float density = 0.0000001f;
+		final float friction = 0.0f;
+		final float restitution = 0.0f;
 
 		BodyDef bd = new BodyDef();
 		bd.type = BodyDef.BodyType.DynamicBody;
@@ -179,6 +181,10 @@ public class State {
 		s.dispose();
 
 		return b;
+	}
+
+	public Body getBall() {
+		return _ball;
 	}
 
 }
