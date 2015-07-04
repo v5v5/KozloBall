@@ -1,5 +1,7 @@
 package v5.game.kozloball.mvc.model;
 
+import v5.game.kozloball.mvc.model.gameObjects.AnimalState;
+
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -10,8 +12,11 @@ public class GameCollision implements ContactListener {
 
 	private Logic _logic;
 
+	// private State _state;
+
 	public GameCollision(Logic logic) {
 		_logic = logic;
+		// _state = _logic._state;
 	}
 
 	@Override
@@ -20,13 +25,53 @@ public class GameCollision implements ContactListener {
 		Body bodyA = contact.getFixtureA().getBody();
 		Body bodyB = contact.getFixtureB().getBody();
 
-		if (((bodyA == _logic._state._player) && (bodyB == _logic._state._ball))
-				|| ((bodyB == _logic._state._player) && (bodyA == _logic._state._ball))) {
-			System.out.println("Contact player to ball");
+		// try {
+		if ((bodyA == _logic._state._ball) || (bodyB == _logic._state._ball)) {
 
-			_logic.initPlayerGrabBall();
-			
+			if ((bodyA == _logic._state._player)
+					|| (bodyB == _logic._state._player)) {
+				System.out.println("Contact player to ball");
+				_logic.initPlayerGrabBall();
+			}
+
+			for (int i = 0; i < _logic._state._animals.size(); i++) {
+				Body animal = _logic._state._animals.get(i);
+
+				if ((bodyA == animal) || (bodyB == animal)) {
+					System.out.println("Contact animal to ball");
+					_logic._state._ball.applyForceToCenter(-100, 0, true);
+				}
+			}
 		}
+
+		if ((bodyA == _logic._state._player)
+				|| (bodyB == _logic._state._player)) {
+
+			Body animal = null;
+
+			for (int i = 0; i < _logic._state._animals.size(); i++) {
+				Body a = _logic._state._animals.get(i);
+
+				if ((bodyA == a) || (bodyB == a)) {
+					System.out.println("Contact player to animal");
+					animal = a;
+					break;
+				}
+			}
+
+			if (animal != null) {
+				AnimalState state = (AnimalState) animal.getUserData();
+
+				if (AnimalState.State.PLAY == state.getState()) {
+					state.setState(AnimalState.State.PENALTY);
+					_logic._state._countLives--;
+				}
+			}
+		}
+
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
 	}
 
 	@Override

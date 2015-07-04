@@ -12,10 +12,10 @@ public class Model implements ModelInterface {
 
 	List<ModelListener> _listeners = new ArrayList<ModelListener>();
 	private Logic _logic = new Logic();
-	
+
 	public Logic getLogic() {
 		return _logic;
-	}	
+	}
 
 	@Override
 	public void addListener(ModelListener listener) {
@@ -35,23 +35,33 @@ public class Model implements ModelInterface {
 	}
 
 	public void start() {
+		_logic.start();
 		fireChangedEvent(Event.SHOW_MENU);
 	}
 
-	public void hitBall() {
-		_logic.destroyJointFromPlayerToBall();
-		
-		Vector2 v =  _logic._state._player.getLinearVelocity();
-		_logic._state._ball.applyForceToCenter(v, true);
-//		_logic._state._player.applyLinearImpulse(0, 0, 1, 0, false);
-//		_logic._state._player.setTransform(1, 10, 3);
-		System.out.println("hit");
+	public void hitBall(int speed) {
+		_logic.hitBall(speed);
 		fireChangedEvent(Event.HIT_BALL);
 	}
 
 	public void step() {
 		_logic.step();
 		fireChangedEvent(Event.STEP);
+
+		int goal = _logic.isGoal();
+		if (goal > 0) {
+			fireChangedEvent(Event.GOAL_TO_ENEMY);
+		} else if (goal < 0) {
+			fireChangedEvent(Event.GOAL_TO_PLAYER);
+		}
+
+		if (_logic._state.getCountLives() <= 0) {
+			fireChangedEvent(Event.GAME_OVER);
+		}
+
+		if ((_logic._state.getTime() / 1000) >= State.GAME_TIME) {
+			fireChangedEvent(Event.GAME_OVER);
+		}
 	}
 
 	public void movePlayer(Direction direction) {
@@ -64,11 +74,9 @@ public class Model implements ModelInterface {
 		fireChangedEvent(Event.STOP_PLAYER);
 	}
 
-	public void resetWorld() {
-		_logic.resetWorld();
+	public void reset() {
+		_logic.reset();
 		fireChangedEvent(Event.RESET_WORLD);
 	}
-	
-	
 
 }

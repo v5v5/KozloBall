@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import v5.game.kozloball.mvc.Utils;
 import v5.game.kozloball.mvc.model.ModelListener.Event;
 import v5.game.kozloball.mvc.model.State;
+import v5.game.kozloball.mvc.model.gameObjects.AnimalState;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,14 +16,67 @@ import com.badlogic.gdx.utils.Array;
 public class View {
 
 	Graphics _g;
-	
-	final int R = 10;
+
+	final static int R = (int) State.R;
 
 	public void draw(LinkedList<Event> _events, State state) {
 		clearView();
 		drawField(state);
 		drawPlayer(state);
-		drawBall(state);		
+		drawBall(state);
+		drawScore(state);
+		drawTime(state);
+		drawCountLives(state);
+		drawAnimals(state);
+	}
+
+	private void drawCountLives(State state) {
+		int count = state.getCountLives();
+		String text = "Lives: " + count;
+		_g.drawString(text, (int) State.W_FIELD / 2 - 50,
+				(int) -State.H_FIELD / 2 - 30);
+	}
+
+	private void drawAnimals(State state) {
+		int x = 0;
+		int y = 0;
+		int r = R;
+
+		Body animal;
+		AnimalState aState;
+
+		for (int i = 0; i < state.getAnimals().size(); i++) {
+
+			animal = state.getAnimals().get(i);
+			aState = (AnimalState) animal.getUserData();
+
+			switch (aState.getState()) {
+			case PLAY:
+				x = (int) state.getAnimals().get(i).getPosition().x;
+				y = (int) (state.getAnimals().get(i).getPosition().y);
+				break;
+
+			case PENALTY:
+				x = (int) (State.W_FIELD / 2 - 2 * r * i);
+				y = (int) (State.H_FIELD / 2 + 30);
+				break;
+			default:
+				break;
+			}
+
+			_g.fillCircle(x, y, r, 5);
+		}
+	}
+
+	private void drawTime(State state) {
+		String time = Float.toString( state.getTime() / 1000);
+		_g.drawString(time, (int) (-State.W_FIELD / 2),
+				(int) (+State.H_FIELD / 2 + 30));
+	}
+
+	private void drawScore(State state) {
+		_g.drawString(state.getScore(), (int) (-State.W_FIELD / 2),
+				(int) (-State.H_FIELD / 2 - 30));
 	}
 
 	private void drawBall(State state) {
@@ -42,7 +96,7 @@ public class View {
 		int y = (int) (state.getPlayer().getPosition().y);
 		int r = R;
 
-//		System.out.println("x: " + x + "  y: " + y);
+		// System.out.println("x: " + x + "  y: " + y);
 		_g.fillCircle(x, y, r, 0);
 	}
 

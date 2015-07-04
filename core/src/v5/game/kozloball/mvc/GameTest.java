@@ -29,7 +29,7 @@ public class GameTest {
 
 			@Override
 			public void paint(java.awt.Graphics g) {
-				controller.repaintView();
+				controller.repaint();
 			}
 		};
 		frame.setSize(600, 600);
@@ -55,10 +55,17 @@ public class GameTest {
 					controller.movePlayer(Direction.UP);
 					break;
 				case KeyEvent.VK_SPACE:
-					controller.hitBall();
+					controller.hitBall(3);
 					break;
-				case KeyEvent.VK_F12:
-					controller.resetWorld();
+				case KeyEvent.VK_1:
+					controller.hitBall(1);
+					break;
+				case KeyEvent.VK_2:
+					controller.hitBall(2);
+					break;
+				case KeyEvent.VK_ESCAPE:
+					controller.reset();
+					controller.start();
 					break;
 				default:
 					break;
@@ -94,8 +101,6 @@ public class GameTest {
 
 			@Override
 			public void fillCircle(int x, int y, int r, int colorIndex) {
-				
-
 				graphics.setColor(COLORS[colorIndex]);
 				graphics.fillOval(ORIGIN_X + x - r, ORIGIN_Y + y - r,
 						2 * r, 2 * r);
@@ -112,6 +117,12 @@ public class GameTest {
 			public void clearRect(int x, int y, int width, int height,
 					int colorIndex) {
 				graphics.clearRect(ORIGIN_X + x, ORIGIN_X + y, width, height);
+			}
+
+			@Override
+			public void drawString(String text, int x, int y) {
+				graphics.setColor(Color.BLACK);
+				graphics.drawString(text, ORIGIN_X + x, ORIGIN_Y + y);				
 			}
 
 		});

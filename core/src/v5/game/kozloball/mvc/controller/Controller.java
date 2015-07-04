@@ -37,9 +37,19 @@ public class Controller implements ModelListener  {
 			break;
 		case MOVE_PLAYER:			
 			break;
+		case GOAL_TO_ENEMY:		
+			System.out.println("Goal to enemy!");
+			_model.reset();
+			break;
+		case GOAL_TO_PLAYER:			
+			System.out.println("Goal to player!");
+			_model.reset();
+			break;
 		case EVENT1:			
 			break;
-		case GAME_OVER:			
+		case GAME_OVER:	
+			_model.reset();
+			_model.start();
 			break;
 
 		default:
@@ -55,8 +65,8 @@ public class Controller implements ModelListener  {
 		_model.movePlayer(direction);
 	}
 
-	public void hitBall() {
-		_model.hitBall();
+	public void hitBall(int speed) {
+		_model.hitBall(speed);
 		_model.stopPlayer();
 	}
 
@@ -64,7 +74,7 @@ public class Controller implements ModelListener  {
 		_model.start();
 	}
 
-	public void repaintView() {
+	public void repaint() {
 		_model.start();
 	}
 
@@ -76,8 +86,8 @@ public class Controller implements ModelListener  {
 		return _model;
 	}
 
-	public void resetWorld() {
-		_model.resetWorld();
+	public void reset() {
+		_model.reset();
 	}
 
 }
