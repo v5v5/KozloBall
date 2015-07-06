@@ -1,7 +1,6 @@
 package v5.game.kozloball.mvc.model;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import v5.game.kozloball.mvc.model.gameObjects.AnimalState;
 import v5.game.kozloball.mvc.model.gameObjects.BallState;
@@ -47,6 +46,7 @@ public class State {
 	private Logic _logic;
 
 	public int _countLives = 3;
+	private boolean _isGoal;
 
 	public State(Logic logic) {
 		_logic = logic;
@@ -103,12 +103,14 @@ public class State {
 
 	Body createField() {
 
-		final float density = 0.0000001f;
-
 		float w = W_FIELD;
 		float h = H_FIELD;
 		float widthGate = h / 3;
 		float lenghtWall = (h - widthGate) / 2;
+
+		final float density = 0.0000001f;
+		final float friction = 0.0f;
+		final float restitution = 0.0f;
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -138,7 +140,14 @@ public class State {
 		shape = new ChainShape();
 		shape.createChain(v);
 		shape.setRadius(1);
-		body.createFixture(shape, density);
+		
+		FixtureDef fixtureDef = new FixtureDef();
+		fixtureDef.shape = shape;
+		fixtureDef.density = density;
+		fixtureDef.friction = friction;
+		fixtureDef.restitution = restitution;
+
+		body.createFixture(fixtureDef);
 
 		shape.dispose();
 
@@ -152,7 +161,7 @@ public class State {
 
 		final float density = 0.0000001f;
 		final float friction = 0.0f;
-		final float restitution = 0.0f;
+		final float restitution = 1.0f;
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -260,8 +269,8 @@ public class State {
 
 			bodies.add(body);
 
-			x = _logic.rand.nextInt((int) (randMaxX - randMinX) + 1) + randMinX;
-			y = _logic.rand.nextInt((int) (randMaxY - randMinY) + 1) + randMinY;
+			x = _logic.rand.nextInt(randMaxX - randMinX + 1) + randMinX;
+			y = _logic.rand.nextInt(randMaxY - randMinY + 1) + randMinY;
 
 			bodies.get(i).setTransform(x, y, 0);
 
@@ -278,6 +287,16 @@ public class State {
 
 	public int getCountLives() {
 		return _countLives;
+	}
+
+	public void setGoal() {
+		_isGoal = true;
+	}
+
+	public boolean isGoal() {
+		boolean goal = _isGoal;
+		_isGoal = false;
+		return goal;
 	}
 
 }

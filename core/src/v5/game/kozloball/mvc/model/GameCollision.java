@@ -73,9 +73,11 @@ public class GameCollision implements ContactListener {
 		switch (isContactBallToWall(bodyA, bodyB)) {
 		case -1:
 			_logic._state._goalToPlayer++;
+			_logic._state.setGoal();
 			break;
 		case 1:
 			_logic._state._goalToEnemy++;
+			_logic._state.setGoal();
 			break;
 		default:
 			break;

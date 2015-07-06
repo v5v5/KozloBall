@@ -75,11 +75,12 @@ public class Logic {
 			switch (aState.getState()) {
 			case PLAY:
 				desireMove = rand.nextInt(100);
-				if (desireMove > 5)
+				if (desireMove > 5) {
 					continue;
+				}
 
-				x = rand.nextInt((int) (randMaxX - randMinX) + 1) + randMinX;
-				y = rand.nextInt((int) (randMaxY - randMinY) + 1) + randMinY;
+				x = rand.nextInt(randMaxX - randMinX + 1) + randMinX;
+				y = rand.nextInt(randMaxY - randMinY + 1) + randMinY;
 				_state._animals.get(i).applyForceToCenter(x, y, true);
 			case PENALTY:
 				if (_state._gameTimeCurrent - aState.getTime() >= State.PENALTY_TIME * 1000) {
@@ -134,8 +135,9 @@ public class Logic {
 
 		}
 
-		if (iAnimal < 0)
+		if (iAnimal < 0) {
 			return;
+		}
 
 		_state._animals.get(iAnimal).applyForceToCenter(
 				_state._ball.getPosition()
@@ -197,8 +199,8 @@ public class Logic {
 		Body animal;
 		// AnimalState aState;
 		for (int i = 0; i < _state._animals.size(); i++) {
-			x = rand.nextInt((int) (randMaxX - randMinX) + 1) + randMinX;
-			y = rand.nextInt((int) (randMaxY - randMinY) + 1) + randMinY;
+			x = rand.nextInt(randMaxX - randMinX + 1) + randMinX;
+			y = rand.nextInt(randMaxY - randMinY + 1) + randMinY;
 
 			animal = _state._animals.get(i);
 			// aState = (AnimalState) animal.getUserData();
@@ -267,24 +269,6 @@ public class Logic {
 			_state._world.destroyJoint(joints.get(i));
 		}
 		_state._jointPlayerToBall = null;
-	}
-
-	public int isGoal() {
-		Body ball = _state.getBall();
-
-		float x = ball.getPosition().x;
-
-		if (x < (-State.W_FIELD / 2 - State.R)) {
-			_state._goalToPlayer++;
-			return -1;
-		}
-
-		if (x > (State.W_FIELD / 2 + State.R)) {
-			_state._goalToEnemy++;
-			return 1;
-		}
-
-		return 0;
 	}
 
 	public void hitBall(int speed) {

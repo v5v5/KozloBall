@@ -37,12 +37,8 @@ public class Controller implements ModelListener  {
 			break;
 		case MOVE_PLAYER:			
 			break;
-		case GOAL_TO_ENEMY:		
-			System.out.println("Goal to enemy!");
-			_model.reset();
-			break;
-		case GOAL_TO_PLAYER:			
-			System.out.println("Goal to player!");
+		case GOAL:		
+			System.out.println("Goal!");
 			_model.reset();
 			break;
 		case EVENT1:			

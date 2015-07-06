@@ -6,8 +6,6 @@ import java.util.List;
 import v5.game.kozloball.mvc.model.ModelListener.Event;
 import v5.game.kozloball.mvc.model.T.Direction;
 
-import com.badlogic.gdx.math.Vector2;
-
 public class Model implements ModelInterface {
 
 	List<ModelListener> _listeners = new ArrayList<ModelListener>();
@@ -48,11 +46,8 @@ public class Model implements ModelInterface {
 		_logic.step();
 		fireChangedEvent(Event.STEP);
 
-		int goal = _logic.isGoal();
-		if (goal > 0) {
-			fireChangedEvent(Event.GOAL_TO_ENEMY);
-		} else if (goal < 0) {
-			fireChangedEvent(Event.GOAL_TO_PLAYER);
+		if (_logic._state.isGoal()) {
+			fireChangedEvent(Event.GOAL);
 		}
 
 		if (_logic._state.getCountLives() <= 0) {
