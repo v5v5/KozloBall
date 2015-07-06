@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import v5.game.kozloball.mvc.model.gameObjects.AnimalState;
+import v5.game.kozloball.mvc.model.gameObjects.BallState;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -34,8 +35,7 @@ public class State {
 	Body _ball;
 	Body _referee;
 	ArrayList<Body> _animals = new ArrayList<Body>();
-//	ArrayList<Body> _animalsPenalty = new ArrayList();
-	
+
 	JointDef _jointPlayerToBall;
 
 	int _goalToEnemy;
@@ -45,7 +45,7 @@ public class State {
 	long _gameTimeCurrent;
 
 	private Logic _logic;
-	
+
 	public int _countLives = 3;
 
 	public State(Logic logic) {
@@ -168,6 +168,8 @@ public class State {
 		fixtureDef.friction = friction;
 		fixtureDef.restitution = restitution;
 
+		body.setUserData(new BallState(_world));
+
 		Fixture fixture = body.createFixture(fixtureDef);
 
 		shape.dispose();
@@ -244,26 +246,26 @@ public class State {
 		float x;
 		float y;
 
-		int randMinX = 0;//(int) (-W_FIELD / 2);
+		int randMinX = 0;// (int) (-W_FIELD / 2);
 		int randMaxX = (int) (W_FIELD / 2);
 		int randMinY = (int) (-H_FIELD / 2);
 		int randMaxY = (int) (H_FIELD / 2);
-		
+
 		Body body;
 
 		for (int i = 0; i < count; i++) {
-			
+
 			body = _world.createBody(bodyDef);
 			body.setUserData(new AnimalState());
-			
+
 			bodies.add(body);
-			
+
 			x = _logic.rand.nextInt((int) (randMaxX - randMinX) + 1) + randMinX;
 			y = _logic.rand.nextInt((int) (randMaxY - randMinY) + 1) + randMinY;
-			
+
 			bodies.get(i).setTransform(x, y, 0);
 
-			Fixture fixture =bodies.get(i).createFixture(fixtureDef);
+			Fixture fixture = bodies.get(i).createFixture(fixtureDef);
 		}
 
 		shape.dispose();

@@ -6,10 +6,12 @@ import v5.game.kozloball.mvc.Utils;
 import v5.game.kozloball.mvc.model.ModelListener.Event;
 import v5.game.kozloball.mvc.model.State;
 import v5.game.kozloball.mvc.model.gameObjects.AnimalState;
+import v5.game.kozloball.mvc.model.gameObjects.BallState;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
 
@@ -69,7 +71,7 @@ public class View {
 	}
 
 	private void drawTime(State state) {
-		String time = Float.toString( state.getTime() / 1000);
+		String time = Float.toString(state.getTime() / 1000);
 		_g.drawString(time, (int) (-State.W_FIELD / 2),
 				(int) (+State.H_FIELD / 2 + 30));
 	}
@@ -85,6 +87,52 @@ public class View {
 		int r = R;
 
 		_g.fillCircle(x, y, r, 2);
+
+		drawWalls(state);
+	}
+
+	private void drawWalls(State state) {
+		BallState ballState = (BallState) state.getBall().getUserData();
+
+		EdgeShape edgeShape = (EdgeShape) ballState.getWallOfEnemy()
+				.getFixtureList().get(0).getShape();
+
+		Vector2 v0 = new Vector2();
+		Vector2 v1 = new Vector2();
+		Vector2 v2 = new Vector2();
+		Vector2 v3 = new Vector2();
+
+		edgeShape.getVertex1(v0);
+		edgeShape.getVertex2(v1);
+		edgeShape.getVertex2(v2);
+		edgeShape.getVertex2(v3);
+
+		// System.out.println("v0: " + v0);
+		// System.out.println("v1: " + v1);
+		// System.out.println("v2: " + v2);
+		// System.out.println("v3: " + v3);
+
+		_g.drawLine((int) v0.x, (int) v0.y, (int) v1.x, (int) v1.y, 2);
+
+		edgeShape = (EdgeShape) ballState.getWallOfPlayer().getFixtureList()
+				.get(0).getShape();
+
+		v0 = new Vector2();
+		v1 = new Vector2();
+		v2 = new Vector2();
+		v3 = new Vector2();
+
+		edgeShape.getVertex1(v0);
+		edgeShape.getVertex2(v1);
+		edgeShape.getVertex2(v2);
+		edgeShape.getVertex2(v3);
+
+		// System.out.println("v0: " + v0);
+		// System.out.println("v1: " + v1);
+		// System.out.println("v2: " + v2);
+		// System.out.println("v3: " + v3);
+
+		_g.drawLine((int) v0.x, (int) v0.y, (int) v1.x, (int) v1.y, 2);
 	}
 
 	private void clearView() {

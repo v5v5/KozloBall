@@ -1,6 +1,7 @@
 package v5.game.kozloball.mvc.model;
 
 import v5.game.kozloball.mvc.model.gameObjects.AnimalState;
+import v5.game.kozloball.mvc.model.gameObjects.BallState;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -69,9 +70,43 @@ public class GameCollision implements ContactListener {
 			}
 		}
 
+		switch (isContactBallToWall(bodyA, bodyB)) {
+		case -1:
+			_logic._state._goalToPlayer++;
+			break;
+		case 1:
+			_logic._state._goalToEnemy++;
+			break;
+		default:
+			break;
+		}
+
 		// } catch (Exception e) {
 		// e.printStackTrace();
 		// }
+	}
+
+	private int isContactBallToWall(Body bodyA, Body bodyB) {
+
+		Body ball = _logic.getState().getBall();
+		Body wallP = ((BallState) ball.getUserData()).getWallOfPlayer();
+		Body wallE = ((BallState) ball.getUserData()).getWallOfEnemy();
+
+		if (((ball == bodyA) && (wallP == bodyB))
+				|| ((ball == bodyB) && (wallP == bodyA))) {
+			return -1;
+		}
+		if (((ball == bodyA) && (wallE == bodyB))
+				|| ((ball == bodyB) && (wallE == bodyA))) {
+			return 1;
+		}
+
+		return 0;
+	}
+
+	private int isContactBallToWall() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
