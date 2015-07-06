@@ -42,6 +42,8 @@ public class View {
 	private void drawAnimals(State state) {
 		int x = 0;
 		int y = 0;
+		int xT = 0;
+		int yT = 0;
 		int r = R;
 
 		Body animal;
@@ -67,6 +69,11 @@ public class View {
 			}
 
 			_g.fillCircle(x, y, r, 5);
+
+//			xT = (int) aState.getTarget().getPosition().x;
+//			yT = (int) aState.getTarget().getPosition().y;
+//
+//			_g.fillCircle(xT, yT, r, 3);
 		}
 	}
 

@@ -30,10 +30,40 @@ public class GameCollision implements ContactListener {
 		detectContactAnimalToBall(bodyA, bodyB);
 		detectContactAnimalToPlayer(bodyA, bodyB);
 		detectContactBallToWall(bodyA, bodyB);
+		detectContactAnimalToTarget(bodyA, bodyB);
 
 		// } catch (Exception e) {
 		// e.printStackTrace();
 		// }
+	}
+
+	private void detectContactAnimalToTarget(Body bodyA, Body bodyB) {
+		
+		Body animal = null;
+		
+		for (int i = 0; i < _logic._state._animals.size(); i++) {
+			Body a = _logic._state._animals.get(i);
+
+			if ((bodyA == a) || (bodyB == a)) {
+				animal = a;
+				break;
+			}
+		}
+		
+		if (animal == null) {
+			return;
+		}
+		
+		AnimalState as = (AnimalState)animal.getUserData();
+		if (as.getState() != AnimalState.S.PLAY) {
+			return;
+		}
+		
+		Body target = as.getTarget();
+		
+		if ((bodyA == target) || (bodyB == target)) {
+			as.newTarget();
+		}
 	}
 
 	private void detectContactAnimalToBall(Body bodyA, Body bodyB) {
@@ -75,8 +105,8 @@ public class GameCollision implements ContactListener {
 			if (animal != null) {
 				AnimalState state = (AnimalState) animal.getUserData();
 
-				if (AnimalState.State.PLAY == state.getState()) {
-					state.setState(AnimalState.State.PENALTY);
+				if (AnimalState.S.PLAY == state.getState()) {
+					state.setState(AnimalState.S.PENALTY);
 					_logic._state._countLives--;
 
 				}

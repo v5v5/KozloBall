@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
 public class Logic {
 
 	State _state;
-	Random rand = new Random();
+	private Random rand = new Random();
 
 	public Logic() {
 		_state = new State(this);
@@ -57,12 +57,12 @@ public class Logic {
 		float x;
 		float y;
 
-		int randMinX = (int) (-State.W_FIELD / 2);
-		int randMaxX = (int) (State.W_FIELD / 2);
-		int randMinY = (int) (-State.H_FIELD / 2);
-		int randMaxY = (int) (State.H_FIELD / 2);
-
-		int desireMove;
+		// int randMinX = (int) (-State.W_FIELD / 2);
+		// int randMaxX = (int) (State.W_FIELD / 2);
+		// int randMinY = (int) (-State.H_FIELD / 2);
+		// int randMaxY = (int) (State.H_FIELD / 2);
+		//
+		// int desireMove;
 
 		Body animal;
 		AnimalState aState;
@@ -74,17 +74,25 @@ public class Logic {
 
 			switch (aState.getState()) {
 			case PLAY:
-				desireMove = rand.nextInt(100);
-				if (desireMove > 5) {
-					continue;
-				}
+				// desireMove = getRandom().nextInt(100);
+				// if (desireMove > 5) {
+				// continue;
+				// }
+				//
+				// x = getRandom().nextInt(randMaxX - randMinX + 1) + randMinX;
+				// y = getRandom().nextInt(randMaxY - randMinY + 1) + randMinY;
+				// _state._animals.get(i).applyForceToCenter(x, y, true);
 
-				x = rand.nextInt(randMaxX - randMinX + 1) + randMinX;
-				y = rand.nextInt(randMaxY - randMinY + 1) + randMinY;
-				_state._animals.get(i).applyForceToCenter(x, y, true);
+				aState.getTarget().setTransform(aState.getTargetPos(), 0);
+				if (animal.getLinearVelocity().len() < 10) {
+					_state._animals.get(i).applyForceToCenter(
+							aState.getTarget().getPosition()
+									.sub(animal.getPosition()).scl(5), true);
+				}
+				break;
 			case PENALTY:
 				if (_state._gameTimeCurrent - aState.getTime() >= State.PENALTY_TIME * 1000) {
-					aState.setState(AnimalState.State.PLAY);
+					aState.setState(AnimalState.S.PLAY);
 				}
 
 				break;
@@ -199,8 +207,8 @@ public class Logic {
 		Body animal;
 		// AnimalState aState;
 		for (int i = 0; i < _state._animals.size(); i++) {
-			x = rand.nextInt(randMaxX - randMinX + 1) + randMinX;
-			y = rand.nextInt(randMaxY - randMinY + 1) + randMinY;
+			x = getRandom().nextInt(randMaxX - randMinX + 1) + randMinX;
+			y = getRandom().nextInt(randMaxY - randMinY + 1) + randMinY;
 
 			animal = _state._animals.get(i);
 			// aState = (AnimalState) animal.getUserData();
@@ -309,8 +317,12 @@ public class Logic {
 			animal = _state._animals.get(i);
 
 			aState = (AnimalState) animal.getUserData();
-			aState.setState(AnimalState.State.PLAY);
+			aState.setState(AnimalState.S.PLAY);
 		}
+	}
+
+	public Random getRandom() {
+		return rand;
 	}
 
 }

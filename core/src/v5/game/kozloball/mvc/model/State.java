@@ -53,6 +53,7 @@ public class State {
 		_world = new World(new Vector2(0, 0), true);
 
 		_world.setContactListener(new GameCollision(_logic));
+		_world.setContactFilter(new GameCollisionFilter(_logic));		
 
 		_player = createPlayer();
 		_field = createField();
@@ -161,7 +162,7 @@ public class State {
 
 		final float density = 0.0000001f;
 		final float friction = 0.0f;
-		final float restitution = 1.0f;
+		final float restitution = 0.5f;
 
 		BodyDef bodyDef = new BodyDef();
 		bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -265,12 +266,12 @@ public class State {
 		for (int i = 0; i < count; i++) {
 
 			body = _world.createBody(bodyDef);
-			body.setUserData(new AnimalState());
+			body.setUserData(new AnimalState(this));
 
 			bodies.add(body);
 
-			x = _logic.rand.nextInt(randMaxX - randMinX + 1) + randMinX;
-			y = _logic.rand.nextInt(randMaxY - randMinY + 1) + randMinY;
+			x = getLogic().getRandom().nextInt(randMaxX - randMinX + 1) + randMinX;
+			y = getLogic().getRandom().nextInt(randMaxY - randMinY + 1) + randMinY;
 
 			bodies.get(i).setTransform(x, y, 0);
 
@@ -297,6 +298,14 @@ public class State {
 		boolean goal = _isGoal;
 		_isGoal = false;
 		return goal;
+	}
+	
+	public World getWorld() {
+		return _world;
+	}
+
+	public Logic getLogic() {
+		return _logic;
 	}
 
 }
