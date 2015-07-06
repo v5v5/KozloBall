@@ -27,6 +27,16 @@ public class GameCollision implements ContactListener {
 		Body bodyB = contact.getFixtureB().getBody();
 
 		// try {
+		detectContactAnimalToBall(bodyA, bodyB);
+		detectContactAnimalToPlayer(bodyA, bodyB);
+		detectContactBallToWall(bodyA, bodyB);
+
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+	}
+
+	private void detectContactAnimalToBall(Body bodyA, Body bodyB) {
 		if ((bodyA == _logic._state._ball) || (bodyB == _logic._state._ball)) {
 
 			if ((bodyA == _logic._state._player)
@@ -44,7 +54,9 @@ public class GameCollision implements ContactListener {
 				}
 			}
 		}
+	}
 
+	private void detectContactAnimalToPlayer(Body bodyA, Body bodyB) {
 		if ((bodyA == _logic._state._player)
 				|| (bodyB == _logic._state._player)) {
 
@@ -66,29 +78,13 @@ public class GameCollision implements ContactListener {
 				if (AnimalState.State.PLAY == state.getState()) {
 					state.setState(AnimalState.State.PENALTY);
 					_logic._state._countLives--;
+
 				}
 			}
 		}
-
-		switch (isContactBallToWall(bodyA, bodyB)) {
-		case -1:
-			_logic._state._goalToPlayer++;
-			_logic._state.setGoal();
-			break;
-		case 1:
-			_logic._state._goalToEnemy++;
-			_logic._state.setGoal();
-			break;
-		default:
-			break;
-		}
-
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
 	}
 
-	private int isContactBallToWall(Body bodyA, Body bodyB) {
+	private void detectContactBallToWall(Body bodyA, Body bodyB) {
 
 		Body ball = _logic.getState().getBall();
 		Body wallP = ((BallState) ball.getUserData()).getWallOfPlayer();
@@ -96,19 +92,16 @@ public class GameCollision implements ContactListener {
 
 		if (((ball == bodyA) && (wallP == bodyB))
 				|| ((ball == bodyB) && (wallP == bodyA))) {
-			return -1;
+			_logic._state._goalToPlayer++;
+			_logic._state.setGoal();
 		}
 		if (((ball == bodyA) && (wallE == bodyB))
 				|| ((ball == bodyB) && (wallE == bodyA))) {
-			return 1;
+			
+			_logic._state._goalToEnemy++;
+			_logic._state.setGoal();
+
 		}
-
-		return 0;
-	}
-
-	private int isContactBallToWall() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override
