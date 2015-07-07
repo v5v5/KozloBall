@@ -73,6 +73,7 @@ public class GameCollision implements ContactListener {
 					|| (bodyB == _logic._state._player)) {
 				System.out.println("Contact player to ball");
 				_logic.initPlayerGrabBall();
+				return;
 			}
 
 			for (int i = 0; i < _logic._state._animals.size(); i++) {
@@ -80,7 +81,8 @@ public class GameCollision implements ContactListener {
 
 				if ((bodyA == animal) || (bodyB == animal)) {
 					System.out.println("Contact animal to ball");
-					_logic._state._ball.applyForceToCenter(-100, 0, true);
+//					_logic._state._ball.applyForceToCenter(-100, 0, true);
+					_logic._state.animalHitBall(-100, 0);
 				}
 			}
 		}

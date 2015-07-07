@@ -40,6 +40,7 @@ public class Logic {
 
 		createPlayerGrabBall();
 		moveAnimals();
+		animalHitBall();
 
 		gameTimePrev = System.currentTimeMillis();
 		_state._gameTimeCurrent = gameTimePrev;
@@ -50,6 +51,15 @@ public class Logic {
 		// System.out.println("x = " + b.get(0).getPosition().x + " , y = " +
 		// b.get(0).getPosition().y);
 
+	}
+
+	private void animalHitBall() {
+		if ((_state.hitOfAnimalToBall.x == 0) && (_state.hitOfAnimalToBall.y == 0)) {
+			return;
+		}
+		_state._ball.applyForceToCenter(_state.hitOfAnimalToBall, true);
+		_state.hitOfAnimalToBall.x = 0;
+		_state.hitOfAnimalToBall.y = 0;		
 	}
 
 	private void moveAnimals() {

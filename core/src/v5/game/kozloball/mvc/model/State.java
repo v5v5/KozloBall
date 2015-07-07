@@ -47,6 +47,8 @@ public class State {
 
 	public int _countLives = 3;
 	private boolean _isGoal;
+	
+	Vector2 hitOfAnimalToBall = new Vector2();
 
 	public State(Logic logic) {
 		_logic = logic;
@@ -306,6 +308,11 @@ public class State {
 
 	public Logic getLogic() {
 		return _logic;
+	}
+
+	public void animalHitBall(int x, int y) {
+		hitOfAnimalToBall.x = x;
+		hitOfAnimalToBall.y = y;		
 	}
 
 }
